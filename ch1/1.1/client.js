@@ -14,14 +14,12 @@ class Client {
 
   // Creates a keccak256/SHA3 hash of some data
   hash(data) {
-    let hashedMessage = EthCrypto.hash.keccak256(data);
-    return hashedMessage;
+    return EthCrypto.hash.keccak256(data);
   }
 
   // Signs a hash of data with the client's private key
   sign(hashedMessage) {
-    let signature = EthCrypto.sign(this.wallet.privateKey, hashedMessage);
-    return signature;
+    return EthCrypto.sign(this.wallet.privateKey, hashedMessage);
   }
 
   // Verifies that a messageHash is signed by a certain address
