@@ -18,7 +18,8 @@ class Client {
   }
 
   // Signs a hash of data with the client's private key
-  sign(hashedMessage) {
+  sign(message) {
+    let hashedMessage = this.hash(message)
     return EthCrypto.sign(this.wallet.privateKey, hashedMessage);
   }
 
