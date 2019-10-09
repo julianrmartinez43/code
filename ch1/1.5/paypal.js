@@ -65,20 +65,18 @@ class Paypal extends Client {
   	// Check if the user's address is on a blacklist. If not, check is the user's address is already in the state, and if not, add the user's address to the state
   	checkUserAddress(tx) {
 		// check if the sender or receiver are on the blacklist
-		for (i in this.blacklist) {
+		if (this.blacklist.includes(tx.contents.from) || this.blacklist.includes(tx.contents.to)) {
 			// if the sender or receiver are banned, return false
-			if (tx.contents.from === i) {
-				return false
-			}
+			return false;
 		}
 	
 		if (!(tx.contents.to in this.state)) {
 				// if the sender is not in the state, add their address and initialize an empty balance and nonce of 0
 		this.state[tx.contents.to] = {
-					balance: 0,
-					nonce: 0
+			balance: 0,
+			nonce: 0
 		};
-		}
+	}
     	// check if the receiver is in the state
 		if (!(tx.contents.from in this.state)) {
 			// if the receiver is not in the state, add their address and initialize an empty balance and nonce of 0
@@ -257,7 +255,7 @@ class Paypal extends Client {
 	// Checks if a transaction is valid, then processes it, then checks if there are any valid transactions in the pending transaction pool and processes those too
 	processTx(tx) {
 		// charge a fee to use the network
-		chargeFee(tx);
+		this.chargeFee(tx);
 		// check the transaction is valid
 		if (this.checkTx(tx)) {
 			// apply the transaction to Paypal's state
