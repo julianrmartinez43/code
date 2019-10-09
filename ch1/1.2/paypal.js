@@ -68,7 +68,7 @@ class Paypal extends Client {
     }
     
     if (tx.contents.type === 'send') {
-      if (this.state[tx.contents.from].balance - tx.contents.amount > 0) {
+      if (this.state[tx.contents.from].balance - tx.contents.amount < 0) {
         return true
       } else {
         return false
@@ -94,7 +94,7 @@ class Paypal extends Client {
     // increase the balance of the transaction receiver  
     this.state[tx.contents.to].balance += tx.contents.amount;
     // add the transaction to the transaction history
-    paypal.txHistory.push(send_tx)
+    this.txHistory.push(tx)
     // return true once the transaction is processed
     return true  
   }
