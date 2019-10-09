@@ -69,9 +69,10 @@ class Paypal extends Client {
     
     if (tx.contents.type === 'send') {
       if (this.state[tx.contents.from].balance - tx.contents.amount < 0) {
-        return true
+        console.log('Not enough crypto')
+        return false;
       } else {
-        return false
+        return true;
       }
     }
   }
@@ -79,7 +80,7 @@ class Paypal extends Client {
   // Checks if a transaction is valid, adds it to the transaction history, and updates the state of accounts and balances
   checkTx(tx) {
     // check that the transaction signature is valid
-    if (this.checkTxSignature(tx) && this.checkUserAddress(tx) && this.checkTx(tx))
+    if (this.checkTxSignature(tx) && this.checkUserAddress(tx) && this.checkTxType(tx))
     {
       return true
     } else {
