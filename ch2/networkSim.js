@@ -32,7 +32,7 @@ class NetworkSimulator {
 
   // broadcast messages from a node to the rest of the network
   broadcast(sender, message) {
-    for (const pid of this.peers[sender]) {
+    for (const pid in this.peers[sender]) {
       this.broadcastTo(sender, pid, message);
     }
   }

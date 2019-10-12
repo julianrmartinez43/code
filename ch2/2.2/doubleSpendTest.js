@@ -15,10 +15,12 @@ class DoubleSpendNetSim extends NetworkSimulator {
     // call NetworkSimulator tick()
     super.tick();
     const victimBalances = [];
+    const victims = [];
+    victims.push(victim1, victim2);
     // for all the victims (network participants)
     for (const v of victims) {
       victimBalances.push([
-        v.state[evilNode.wallet.address].balance,
+        v.state[attacker.wallet.address].balance,
         v.state[v.wallet.address].balance,
       ]);
       // keep track of the balances of network participants
@@ -79,10 +81,16 @@ for (let i = 0; i < numNodes; i++) {
 }
 
 // Attempting to double spend!
-// TODO: designate the node that will double spend
+let attacker = network.agents[0];
 // TODO: designate the nodes that we will perform the attack on
-// TODO: create 2 identical transactions that have different recipients
-// TODO: broadcast both transaction to the network at the same time
+let victim1 = network.agents[1];
+let victim2 = network.agents[2];
+
+let tx1 = attacker.generateTx(victim1.wallet.address, 100);
+let tx2 = attacker.generateTx(victim2.wallet.address, 100);
+
+network.broadcast(attacker.wallet.address, tx1);
+network.broadcast(attacker.wallet.address, tx2);
 
 // Running the simulation
 // due to network latency some nodes will receive one transaction before the other
